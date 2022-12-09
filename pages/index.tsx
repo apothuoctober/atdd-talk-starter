@@ -26,14 +26,21 @@ const Page$Home: NextPage = () => {
       setTodoFormError("New item name is empty")
     }
     else {
-      const newTodo: Todo = {
-        key: Math.random() * 9999,
-        name: todoFormName!,
-        completed: false,
+      const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
+      if (possibleConflictingTodo !== undefined) {
+        setTodoFormError('An item with this name already exists')
+        setTodoFormName(null)
       }
-      const todosListCopy = [...todosList, newTodo]
-      setTodosList(todosListCopy)
-      setTodoFormName(null)
+      else {
+        const newTodo: Todo = {
+          key: Math.random() * 9999,
+          name: todoFormName!,
+          completed: false,
+        }
+        const todosListCopy = [...todosList, newTodo]
+        setTodosList(todosListCopy)
+        setTodoFormName(null)
+      }
     }
   }
 
