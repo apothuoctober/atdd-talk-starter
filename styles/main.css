@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap');
+/* Globals */
+* {
+  /* Colors */
+  --color-ebony: #59594A;
+  --color-shadow-blue: #7286A0;
+  --color-brown-sugar: #BE6E46;
+  --color-tea-green: #CDE7B0;
+  --color-cambridge-blue: #A3BFA8;
+
+  /* Set default color to custom black */
+  color: var(--color-ebony);
+  font-family: 'Architects Daughter', cursive;
+}
+
+/* Header */
+.header {
+  border-radius: 100%;
+  padding: 8px;
+}
+
+.header h1 {
+  color: var(--color-cambridge-blue);
+}
+
+/* Main */
+.main {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(1, 1fr);
+  padding: 8px;
+}
+
+/* Todo Form */
+.todo-form fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.todo-form label {
+  margin-right: 8px;
+}
+
+.todo-form input {
+  padding: 4px 8px;
+}
+
+.todo-form button[type=submit] {
+  border: none;
+  border-radius: 4px;
+  background-color: var(--color-tea-green);
+  cursor: pointer;
+  font-weight: bold;
+  padding: 8px;
+  text-transform: uppercase;
+}
+
+fieldset.todo-form-actions {
+  margin-top: 16px;
+}
+
+/* Todos list */
+ul.todos-list {
+  list-style-type: none;
+  margin: 0;
+  margin-top: 16px;
+  max-width: 280px;
+  padding: 0;
+}
+
+/* Todo item */
+li.todos-list-item {
+  align-items: center;
+  box-shadow: 0px 0px 4px -2px var(--color-ebony);
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding: 4px;
+}
+
+li.todos-list-item.completed {
+  background-color: var(--color-tea-green);
+}
+
+li.todos-list-item input[type=checkbox] {
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+}
+
+li.todos-list-item p.completed {
+  text-decoration: line-through;
+}
+
+li.todos-list-item button.delete-todo {
+  align-items: center;
+  background-color: var(--color-ebony);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  font-size: 12px;
+  font-weight: bold;
+  height: 24px;
+  justify-content: center;
+  padding: 8px;
+  text-transform: uppercase;
+  width: 24px;
+}
+
+/* On bigger screens */
+@media screen and (min-width: 769px) {
+
+  /* Main */
+  .main {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Todos list */
+  ul.todos-list {
+    max-width: 320px;
+  }
+
+}
