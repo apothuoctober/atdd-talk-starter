@@ -22,6 +22,7 @@ Feature: Adding new todo items
       When I fill new item with "wash the dog"
       And I submit a new item
       Then I am warned that I cannot submit a duplicated item
+      And I see "wash the dog" item highlighted for conflict illustration
       And I see 4 todo items
 
   Rule: I can submit valid new item
