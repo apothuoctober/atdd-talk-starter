@@ -1,7 +1,7 @@
 // noinspection JSVoidFunctionReturnValueUsed
 
-import { NextPage } from 'next'
-import React, { ChangeEvent, FormEvent, useEffect, useState } from 'react'
+import {NextPage} from 'next'
+import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react'
 import classNames from 'classnames'
 
 // Typescript interface for Todo item
@@ -19,19 +19,30 @@ const Page$Home: NextPage = () => {
   // the list of todos
   const [todosList, setTodosList] = useState<Todo[]>([])
 
+  const setTodoFormErrorFor5Sec = (error: string | null) => {
+    if (error !== null) {
+      setTodoFormError(error)
+      setTimeout(() => {
+        setTodoFormError(null)
+      }, 5000)
+    }
+  }
+
+  const setTodoFormNameAndResetError = (name: string | null) => {
+    setTodoFormName(name)
+    setTodoFormError(null)
+  }
+
   // add a new todo from the form to the list
   const addTodoHandler = (e: FormEvent | null): void => {
     if (e !== null) e.preventDefault()
     if (todoFormName === null || todoFormName === "" || todoFormName.length === 0) {
-      setTodoFormError("New item name is empty")
-    }
-    else {
+      setTodoFormErrorFor5Sec("New item name is empty")
+    } else {
       const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
       if (possibleConflictingTodo !== undefined) {
-        setTodoFormError('An item with this name already exists')
-        setTodoFormName(null)
-      }
-      else {
+        setTodoFormErrorFor5Sec('An item with this name already exists')
+      } else {
         const newTodo: Todo = {
           key: Math.random() * 9999,
           name: todoFormName!,
@@ -39,7 +50,7 @@ const Page$Home: NextPage = () => {
         }
         const todosListCopy = [...todosList, newTodo]
         setTodosList(todosListCopy)
-        setTodoFormName(null)
+        setTodoFormNameAndResetError(null)
       }
     }
   }
@@ -54,7 +65,7 @@ const Page$Home: NextPage = () => {
 
   // change new todo name in the form
   const todoFormNameChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    setTodoFormName(e.target.value)
+    setTodoFormNameAndResetError(e.target.value)
   }
 
   // toggle todo item completion
@@ -71,7 +82,7 @@ const Page$Home: NextPage = () => {
     if (window.Cypress !== undefined) {
       // @ts-ignore
       window.hacks = {
-        addTodos: (todos: [{name: string, completed: boolean}]) => {
+        addTodos: (todos: [{ name: string, completed: boolean }]) => {
           console.log('Invoked for test: add todo, with', todos)
           const newTodos = todos.map((t) => ({
             ...t,
@@ -82,7 +93,12 @@ const Page$Home: NextPage = () => {
         }
       }
     }
-  },[])
+  }, [])
+
+  const isConflictingOnTodoName = todoFormError !== null && todoFormError.includes('already exists')
+  const isConflictingTodo = (todoName: string): boolean => {
+    return isConflictingOnTodoName && todoFormName === todoName
+  }
 
   return (
     <>
@@ -125,10 +141,15 @@ const Page$Home: NextPage = () => {
         */}
         <ul className='todos-list'>
           {todosList.map((todo) => (
-            <li className={classNames('todos-list-item', { completed: todo.completed })} key={todo.key}>
-              <input type='checkbox' checked={todo.completed} onChange={() => { toggleTodoHandler(todo) }} />
-              <p className={classNames({ completed: todo.completed })}>{todo.name}</p>
-              <button className='delete-todo' type='button' onClick={() => { removeTodoHandler(todo) }}>❌</button>
+            <li className={classNames('todos-list-item', {completed: todo.completed, conflict: isConflictingTodo(todo.name)})} key={todo.key}>
+              <input type='checkbox' checked={todo.completed} onChange={() => {
+                toggleTodoHandler(todo)
+              }}/>
+              <p className={classNames({completed: todo.completed})}>{todo.name}</p>
+              <button className='delete-todo' type='button' onClick={() => {
+                removeTodoHandler(todo)
+              }}>❌
+              </button>
             </li>
           ))}
         </ul>
