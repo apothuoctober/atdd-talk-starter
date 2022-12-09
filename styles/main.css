@@ -46,6 +46,11 @@
   padding: 4px 8px;
 }
 
+.todo-form .todo-form-error {
+  display: block;
+  color: var(--color-brown-sugar);
+}
+
 .todo-form button[type=submit] {
   border: none;
   border-radius: 4px;
