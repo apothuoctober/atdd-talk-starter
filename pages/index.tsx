@@ -130,7 +130,7 @@ const Page$Home: NextPage = () => {
         */}
         <ul className='todos-list'>
           {todosList.map((todo) => (
-            <li className={classNames('todos-list-item', { completed: todo.completed })} key={todo.key}>
+            <li className={classNames('todos-list-item', { completed: todo.completed, conflict: isConflictingTodo(todo.name) })} key={todo.key}>
               <input type='checkbox' checked={todo.completed} onChange={() => { toggleTodoHandler(todo) }} />
               <p className={classNames({ completed: todo.completed })}>{todo.name}</p>
               <button className='delete-todo' type='button' onClick={() => { removeTodoHandler(todo) }}>❌</button>
