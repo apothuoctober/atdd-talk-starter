@@ -29,7 +29,6 @@ const Page$Home: NextPage = () => {
       const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
       if (possibleConflictingTodo !== undefined) {
         setTodoFormError('An item with this name already exists')
-        setTodoFormName(null)
       }
       else {
         const newTodo: Todo = {
