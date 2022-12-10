@@ -96,7 +96,7 @@ const Page$Home: NextPage = () => {
   }, [])
 
   const isConflictingOnTodoName = todoFormError !== null && todoFormError.includes('already exists')
-  const isConflictingTodo = (todoName: string): boolean => {
+  const isConflicting = (todoName: string): boolean => {
     return isConflictingOnTodoName && todoFormName === todoName
   }
 
