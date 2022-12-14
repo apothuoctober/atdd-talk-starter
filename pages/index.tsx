@@ -19,29 +19,15 @@ const Page$Home: NextPage = () => {
   // the list of todos
   const [todosList, setTodosList] = useState<Todo[]>([])
 
-  const setTodoFormErrorFor5Sec = (error: string | null) => {
-    if (error !== null) {
-      setTodoFormError(error)
-      setTimeout(() => {
-        setTodoFormError(null)
-      }, 5000)
-    }
-  }
-
-  const setTodoFormNameAndResetError = (name: string | null) => {
-    setTodoFormName(name)
-    setTodoFormError(null)
-  }
-
   // add a new todo from the form to the list
   const addTodoHandler = (e: FormEvent | null): void => {
     if (e !== null) e.preventDefault()
     if (todoFormName === null || todoFormName === "" || todoFormName.length === 0) {
-      setTodoFormErrorFor5Sec("New item name is empty")
+      setTodoFormError("New item name is empty")
     } else {
       const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
       if (possibleConflictingTodo !== undefined) {
-        setTodoFormErrorFor5Sec('An item with this name already exists')
+        setTodoFormError('An item with this name already exists')
       } else {
         const newTodo: Todo = {
           key: Math.random() * 9999,
@@ -50,7 +36,7 @@ const Page$Home: NextPage = () => {
         }
         const todosListCopy = [...todosList, newTodo]
         setTodosList(todosListCopy)
-        setTodoFormNameAndResetError(null)
+        setTodoFormName(null)
       }
     }
   }
@@ -65,7 +51,7 @@ const Page$Home: NextPage = () => {
 
   // change new todo name in the form
   const todoFormNameChangeHandler = (e: ChangeEvent<HTMLInputElement>): void => {
-    setTodoFormNameAndResetError(e.target.value)
+    setTodoFormName(e.target.value)
   }
 
   // toggle todo item completion
@@ -109,7 +95,7 @@ const Page$Home: NextPage = () => {
 
       <main className='main'>
 
-        {/* 
+        {/*
         *************************
         NEW TODO FORM
         *************************
@@ -134,7 +120,7 @@ const Page$Home: NextPage = () => {
           </fieldset>
         </form>
 
-        {/* 
+        {/*
         *************************
         TODOS LIST
         *************************
