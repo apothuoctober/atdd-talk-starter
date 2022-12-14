@@ -89,6 +89,10 @@ li.todos-list-item.completed {
   background-color: var(--color-tea-green);
 }
 
+li.todos-list-item.conflict {
+  border: 2px var(--color-brown-sugar) solid;
+}
+
 li.todos-list-item input[type=checkbox] {
   cursor: pointer;
   height: 24px;

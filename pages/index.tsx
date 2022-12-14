@@ -26,14 +26,20 @@ const Page$Home: NextPage = () => {
       setTodoFormError("New item name is empty")
     }
     else {
-      const newTodo: Todo = {
-        key: Math.random() * 9999,
-        name: todoFormName!,
-        completed: false,
+      const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
+      if (possibleConflictingTodo !== undefined) {
+        setTodoFormError('An item with this name already exists')
       }
-      const todosListCopy = [...todosList, newTodo]
-      setTodosList(todosListCopy)
-      setTodoFormName(null)
+      else {
+        const newTodo: Todo = {
+          key: Math.random() * 9999,
+          name: todoFormName!,
+          completed: false,
+        }
+        const todosListCopy = [...todosList, newTodo]
+        setTodosList(todosListCopy)
+        setTodoFormName(null)
+      }
     }
   }
 
@@ -64,7 +70,7 @@ const Page$Home: NextPage = () => {
     if (window.Cypress !== undefined) {
       // @ts-ignore
       window.hacks = {
-        addTodos: (todos: [{name: string, completed: boolean}]) => {
+        addTodos: (todos: [{ name: string, completed: boolean }]) => {
           console.log('Invoked for test: add todo, with', todos)
           const newTodos = todos.map((t) => ({
             ...t,
@@ -75,7 +81,14 @@ const Page$Home: NextPage = () => {
         }
       }
     }
-  },[])
+  }, [])
+
+  // A variable to check if a conflict exists on new todo name
+  const isConflictingOnTodoName = todoFormError !== null && todoFormError.includes('already exists')
+  // A function to check if the conflict is on a given item or not
+  const isConflictingTodo = (todoName: string): boolean => {
+    return isConflictingOnTodoName && todoFormName === todoName
+  }
 
   return (
     <>
@@ -118,7 +131,19 @@ const Page$Home: NextPage = () => {
         */}
         <ul className='todos-list'>
           {todosList.map((todo) => (
-            <li className={classNames('todos-list-item', { completed: todo.completed })} key={todo.key}>
+            <li
+              className={
+                classNames(
+                  'todos-list-item',
+                  {
+                    completed: todo.completed,
+                    // add conflict class if conflict and conflict is on this name
+                    conflict: isConflictingTodo(todo.name)
+                  }
+                )
+              }
+              key={todo.key}
+            >
               <input type='checkbox' checked={todo.completed} onChange={() => { toggleTodoHandler(todo) }} />
               <p className={classNames({ completed: todo.completed })}>{todo.name}</p>
               <button className='delete-todo' type='button' onClick={() => { removeTodoHandler(todo) }}>❌</button>

@@ -41,6 +41,14 @@ Then("I am warned that I cannot submit an empty item", () => {
   cy.get("span.todo-form-error").should("contain.text", "is empty")
 })
 
+Then("I am warned that I cannot submit a duplicated item", () => {
+  cy.get("span.todo-form-error").should("contain.text", "already exists")
+})
+
+Then("I see {string} item highlighted for conflict illustration", (item: string) => {
+  cy.contains(item).parent().should("contain.class", "conflict")
+})
+
 Then("I have no warnings", () => {
   cy.get("span.todo-form-error").should("not.exist")
 })
