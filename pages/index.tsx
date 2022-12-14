@@ -26,20 +26,14 @@ const Page$Home: NextPage = () => {
       setTodoFormError("New item name is empty")
     }
     else {
-      const possibleConflictingTodo = todosList.find((t) => t.name === todoFormName)
-      if (possibleConflictingTodo !== undefined) {
-        setTodoFormError('An item with this name already exists')
+      const newTodo: Todo = {
+        key: Math.random() * 9999,
+        name: todoFormName!,
+        completed: false,
       }
-      else {
-        const newTodo: Todo = {
-          key: Math.random() * 9999,
-          name: todoFormName!,
-          completed: false,
-        }
-        const todosListCopy = [...todosList, newTodo]
-        setTodosList(todosListCopy)
-        setTodoFormName(null)
-      }
+      const todosListCopy = [...todosList, newTodo]
+      setTodosList(todosListCopy)
+      setTodoFormName(null)
     }
   }
 
@@ -83,13 +77,6 @@ const Page$Home: NextPage = () => {
     }
   }, [])
 
-  // A variable to check if a conflict exists on new todo name
-  const isConflictingOnTodoName = todoFormError !== null && todoFormError.includes('already exists')
-  // A function to check if the conflict is on a given item or not
-  const isConflictingTodo = (todoName: string): boolean => {
-    return isConflictingOnTodoName && todoFormName === todoName
-  }
-
   return (
     <>
 
@@ -99,7 +86,7 @@ const Page$Home: NextPage = () => {
 
       <main className='main'>
 
-        {/* 
+        {/*
         *************************
         NEW TODO FORM
         *************************
@@ -124,7 +111,7 @@ const Page$Home: NextPage = () => {
           </fieldset>
         </form>
 
-        {/* 
+        {/*
         *************************
         TODOS LIST
         *************************
@@ -137,8 +124,6 @@ const Page$Home: NextPage = () => {
                   'todos-list-item',
                   {
                     completed: todo.completed,
-                    // add conflict class if conflict and conflict is on this name
-                    conflict: isConflictingTodo(todo.name)
                   }
                 )
               }
