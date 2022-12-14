@@ -1,7 +1,7 @@
 import {Given, When, Then, DataTable} from "@badeball/cypress-cucumber-preprocessor";
 
 Given("I open my todo list", () => {
-  cy.visit("/");
+  cy.visit("/")
 });
 
 Given("I have no todo items", () => {
@@ -35,6 +35,10 @@ When("I toggle off {string} item", (todoItem: string) => {
 
 When("I remove {string} item", (todoItem: string) => {
   cy.contains(todoItem).parent().find('button').click()
+})
+
+When("I wait for {int} seconds", (num: number) => {
+  cy.wait(num * 1000)
 })
 
 Then("I am warned that I cannot submit an empty item", () => {
